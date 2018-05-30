@@ -210,10 +210,3 @@ s：分割文件，其它待实验/,K,j,J,g,?
 分割完：
 git diff：未添加到暂存区，还需git ad
 git diff --cached：已添加到暂存区，git ci -m “xxx”
-
-
-
-
-
-
-
