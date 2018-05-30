@@ -1,0 +1,219 @@
+一、 在Ubuntu16.04上使用github步骤：
+
+1.初始化工作（本地）
+1）py@py-v:~/git_py$ git init	#先在本地建立一个新文件夹git_py
+初始化空的 Git 仓库于 /home/py/git_py/.git/
+初始化后会看到一个隐藏文件夹：.git
+py@py-v:~/git_py$ cd .git/
+py@py-v:~/git_py/.git$ ls
+branches  config  description  HEAD  hooks  info  objects  refs
+
+2）py@py-v:~/git_py$ git status 查看git状态，随时都可以用，而且要多用
+位于分支 master
+初始提交
+无文件要提交（创建/拷贝文件并使用 "git add" 建立跟踪）
+
+3）py@py-v:~/git_py$ vim README.md	（编辑文档，写入东西）
+py@py-v:~/git_py$ git status 
+位于分支 master
+初始提交
+未跟踪的文件:
+  （使用 "git add <文件>..." 以包含要提交的内容）
+	README.md	（红色）
+提交为空，但是存在尚未跟踪的文件（使用 "git add" 建立跟踪）
+
+4）py@py-v:~/git_py$ git add README.md （添加到暂存区）
+py@py-v:~/git_py$ git status 
+位于分支 master
+初始提交
+要提交的变更：
+  （使用 "git rm --cached <文件>..." 以取消暂存）
+	新文件：   README.md	（绿色）
+
+5）py@py-v:~/git_py$ git commit -m "在Ubuntu16.04的git第一次提交，学习中..."		#提交到本地仓库
+[master （根提交） dfef9a2] 在Ubuntu16.04的git第一次提交，学习中...
+ 1 file changed, 3 insertions(+)
+ create mode 100644 README.md
+py@py-v:~/git_py$ git status 	（查看状态）
+位于分支 master
+无文件要提交，干净的工作区
+
+6）py@py-v:~/git_py$ vim README.md 		#修改文档
+py@py-v:~/git_py$ git status 
+位于分支 master
+尚未暂存以备提交的变更：
+  （使用 "git add <文件>..." 更新要提交的内容）
+  （使用 "git checkout -- <文件>..." 丢弃工作区的改动）
+	修改：     README.md	（红色）
+修改尚未加入提交（使用 "git add" 和/或 "git commit -a"）
+
+7）py@py-v:~/git_py$ git commit -a -m "第一次直接提交到仓库，练习..."		#直接提交到本地仓库
+[master 3f12fca] 第一次直接提交到仓库，练习...
+ 1 file changed, 1 insertion(+)
+
+8）py@py-v:~/git_py$ git log		#查看提交日志，有哈希值字符串码
+commit 3f12fca50b1d9132cd760a35ba808064c6fc630c
+Author: Chenweihua <xjbrhnhh@163.com>
+Date:   Sun Apr 8 08:52:40 2018 +0800
+    第一次直接提交到仓库，练习...
+commit dfef9a2c7c4ab63034b14f0730c4c974f25d1aba
+Author: Chenweihua <xjbrhnhh@163.com>
+Date:   Sun Apr 8 08:46:51 2018 +0800
+Author: Chenweihua <xjbrhnhh@163.com>
+Date:   Sun Apr 8 08:52:40 2018 +0800
+    第一次直接提交到仓库，练习...
+commit dfef9a2c7c4ab63034b14f0730c4c974f25d1aba
+Author: Chenweihua <xjbrhnhh@163.com>
+Date:   Sun Apr 8 08:46:51 2018 +0800
+在Ubuntu16.04的git第一次提交，学习中...
+py@py-v:~/git_py$ git show 3f12fca50b1d9132cd760a35ba808064c6fc630c
+commit 3f12fca50b1d9132cd760a35ba808064c6fc630c
+Author: Chenweihua <xjbrhnhh@163.com>
+Date:   Sun Apr 8 08:52:40 2018 +0800
+    第一次直接提交到仓库，练习...
+diff --git a/README.md b/README.md
+index 528dbcd..b415c1c 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,4 @@
+ # README
+ hello git!
++第一次练习，学些中...
+
+2. 远程推送，远程下拽（增删改）、克隆（仓库）
+1）py@py-v:~/git_py$ git remote -v	#查看以前有无github连接
+
+2）py@py-v:~/git_py$ git remote add origin https://github.com/amtfbky/git_py	#origin是代表这串网址，连接github，会提示您输入用户名和密码
+py@py-v:~/git_py$ git remote -v
+origin	https://github.com/amtfbky/git_py (fetch)
+origin	https://github.com/amtfbky/git_py (push)
+py@py-v:~/git_py$ git push origin master		#开始推送本地仓库
+Username for 'https://github.com': amtfbky
+Password for 'https://amtfbky@github.com': 
+remote: Repository not found.
+fatal: repository 'https://github.com/amtfbky/git_py/' not found	#为什么没有发现呢？因为要先在github网站建立一个仓库：git_py
+py@py-v:~/git_py$ git push origin master	#再远程推送
+
+Username for 'https://github.com': amtfbky
+Password for 'https://amtfbky@github.com': 
+对象计数中: 10, 完成.
+Delta compression using up to 8 threads.
+压缩对象中: 100% (7/7), 完成.
+写入对象中: 100% (10/10), 2.81 KiB | 0 bytes/s, 完成.
+Total 10 (delta 0), reused 0 (delta 0)
+To https://github.com/amtfbky/git_py
+ * [new branch]      master -> master
+
+3）py@py-v:~/git_py$ git pull origin master		#往本地仓库下拽在github网站的改动
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+展开对象中: 100% (3/3), 完成.
+来自 https://github.com/amtfbky/git_py
+ * branch            master     -> FETCH_HEAD
+   140ad55..9da8157  master     -> origin/master
+更新 140ad55..9da8157
+Fast-forward
+ README.md | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+4）py@py-v:~/git_py$ git clone https://github.com/amtfbky/python	#从github网站克隆仓库文件夹到本地
+正克隆到 'python'...
+remote: Counting objects: 11, done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 11 (delta 0), reused 0 (delta 0), pack-reused 0
+展开对象中: 100% (11/11), 完成.
+检查连接... 完成。
+
+二、 ssh协议
+1. 生成公钥（id_rsa.pub）和私钥（id_rsa）
+py@py-v:~/git_py$ ssh-keygen -t rsa -C "xjbrhnhh@163.com"
+2. 把~（家目录）下的.ssh里公钥的内容复制到github
+（settings->SSH and GPG keys）
+3. 确保github上面有本地数据，删除本地原先用http协议的文件夹
+py@py-v:~$ git clone git@github.com:amtfbky/git_py
+正克隆到 'git_py'...
+Warning: Permanently added the RSA host key for IP address '13.229.188.59' to the list of known hosts.
+remote: Counting objects: 13, done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 13 (delta 0), reused 10 (delta 0), pack-reused 0
+接收对象中: 100% (13/13), 完成.
+检查连接... 完成。
+py@py-v:~$ cd git_py/
+py@py-v:~/git_py$ git remote -v
+origin	git@github.com:amtfbky/git_py (fetch)
+origin	git@github.com:amtfbky/git_py (push)
+4. 最好把公钥和私钥打包压缩存到百度网盘里，以后重装系统可以下载使用，不用重新配对公钥
+5. 接下来开始实验，改动文档，添加到暂存区，提交，再远程推送
+py@py-v:~/git_py$ git push git@github.com:amtfbky/git_py
+warning: push.default 尚未设置，它的默认值在 Git 2.0 已从 'matching'
+变更为 'simple'。若要不再显示本信息并保持传统习惯，进行如下设置：
+  git config --global push.default matching
+若要不再显示本信息并从现在开始采用新的使用习惯，设置：
+  git config --global push.default simple
+当 push.default 设置为 'matching' 后，git 将推送和远程同名的所有
+本地分支。
+从 Git 2.0 开始，Git 默认采用更为保守的 'simple' 模式，只推送当前
+分支到远程关联的同名分支，即 'git push' 推送当前分支。
+参见 'git help config' 并查找 'push.default' 以获取更多信息。
+（'simple' 模式由 Git 1.7.11 版本引入。如果您有时要使用老版本的 Git，
+为保持兼容，请用 'current' 代替 'simple'）
+对象计数中: 3, 完成.
+Delta compression using up to 8 threads.
+压缩对象中: 100% (3/3), 完成.
+写入对象中: 100% (3/3), 370 bytes | 0 bytes/s, 完成.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+py@py-v:~$ git config --global push.default simple
+py@py-v:~/git_py$ git push
+对象计数中: 3, 完成.
+Delta compression using up to 8 threads.
+压缩对象中: 100% (3/3), 完成.
+写入对象中: 100% (3/3), 374 bytes | 0 bytes/s, 完成.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To git@github.com:amtfbky/git_py
+   7d40d10..6d05892  master -> master
+
+三、进阶篇
+1.py@py-v:~/git_py$ git blame README.md		#git blame -L 3,5 README.md，第三行到第五行
+^dfef9a2 (Chenweihua 2018-04-08 08:46:51 +0800 1) # README
+^dfef9a2 (Chenweihua 2018-04-08 08:46:51 +0800 2) 
+^dfef9a2 (Chenweihua 2018-04-08 08:46:51 +0800 3) hello git!
+9da81579 (amtfbky    2018-04-08 09:34:08 +0800 4) 第一次练习，其实是复习了（呵呵，惭愧，浪费太多时间了！）学些中...
+9da81579 (amtfbky    2018-04-08 09:34:08 +0800 5) 这是在github网站里改动，练习往本地仓库下拽改动...
+
+2.新建文档，未添加到暂存区，全部清除
+git clean -n		#删除前查看新建文档
+git clean -f		#删除
+git clean -x -f	#删除忽略的文件
+git status -sb	#精简提示信息
+3. add:
+git ad
+git ci -m “改动文档的提示信息”
+git reset HEAD filename	#把添加到暂存区的文档退回到工作区
+del:
+git rm filename
+git ad
+git ci -m “改动文档的提示信息”
+mv:
+git mv a b
+git ci -m “rename a to b”
+4. 分割文件上传
+条件：文件添加到暂存区后，又改动了
+git add -p filename
+Stage this hunk [y,n,q,a,d,/,s,e,?]? s
+Stage this hunk [y,n,q,a,d,/,j,J,g,e,?]? y
+Stage this hunk [y,n,q,a,d,/,K,j,J,g,e,?]? y
+Stage this hunk [y,n,q,a,d,/,K,g,e,?]? n
+s：分割文件，其它待实验/,K,j,J,g,?
+分割完：
+git diff：未添加到暂存区，还需git ad
+git diff --cached：已添加到暂存区，git ci -m “xxx”
+
+
+
+
+
+
+
