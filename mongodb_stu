@@ -1,0 +1,96 @@
+db.createCollection('stu')
+show collections
+db.stu.insert({name:'xhm',gender:true})
+db.stu.find()
+db.stu.drop()
+db.stu.update({},{$set:{name:'hr'}})
+
+
+db.sub.find({count:{$gt:2}})
+db.sub.find({title:'css',count:{$gt:2}})	# 逻辑与
+db.sub.find({$or:[{title:'css'},{count:{$gt:2}}]})	# 逻辑或({x[{x:x},{x:{x:x}}]})
+db.sub.find({count:{$in:[10,15]}})	# 在10和15两个选项里
+db.sub.find({count:{$nin:[10,15]}})	# nin：not in
+db.stu.find({name:/^g/})		# 查找以g开头的
+=db.stu.find({name:{$regex:'^g'}})	# json的写法
+
+# 自定义查询
+db.stu.find({$where:function(){return this.age>20}})
+db.stu.find({$where:function(){return this.name.indexOf('g')==0}})
+db.stu.find({$where:function(){return this.name.indexOf('r')>=0}})	# 值含r字母且索引>=0
+
+db.sub.find().limit(1)			# 限定一条
+db.sub.find().limit(1).skip(1)		# 跳过一条，=第二条
+db.sub.find().skip(1).limit(1)		# 同上
+db.sub.find().skip(2).limit(1)		# 跳过二条，查询第三条
+
+# 投影，筛选查询
+db.stu.find({},{name:1})
+db.stu.find({},{name:1,_id:0})
+
+# 排序
+db.stu.find().sort({age:-1})
+
+# 统计
+db.stu.count({age:{$gt:28}})		# 可以不写find()
+
+# 去重
+db.stu.distinct('去重字段',{条件})
+db.stu.distinct('gender',{age:{$gt:16}})
+
+# 聚合
+db.stu.aggregate([
+    {$group:
+        {_id:'$gender',			# 注意：$gender，性别前的$符号
+            counter:{
+                    $sum:1		# 男女总数
+                }}  
+        }
+])
+
+db.stu.aggregate([
+    {$group:
+        {_id:'$gender',
+            counter:{
+                    $sum/avg/min/max:'$age'	# 年龄总和、年龄平均值、最小/大值
+                }}  
+        }
+])
+
+db.stu.aggregate([
+    {$group:
+        {_id:'$gender',
+            counter:{
+                    $first:'$age'	# 取性别的头一条，last则是最后一条
+                }}  
+        }
+])
+
+# 聚合结果集
+db.stu.aggregate([
+    {$group:
+        {_id:'$gender',
+            counter:{
+                    $push:'$age'	# 把男女的年龄都列出，可以查看年龄差异性数据——关系型数据库no
+                }}  
+        }
+])
+
+# 聚合结果集：整个文档都列出
+db.stu.aggregate([
+    {$group:
+        {_id:'$gender',
+            counter:{
+                    $push:'$$ROOT'
+                }}  
+        }
+])
+
+# 男女总人数，年龄平均值，把男女统计结果都放在一个文档里
+db.stu.aggregate([
+    {$group:
+        {_id:null,
+         counter:{$sum:1},
+         avgAge:{$avg:'$age'}}
+        }
+])
